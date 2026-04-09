@@ -18,10 +18,12 @@ public class BackendApplication {
     @Bean
     CommandLineRunner run(RoleRepository roleRepository) {
         return args -> {
-            roleRepository.save(new Role(AuthorityLevel.LEARNER));
-            roleRepository.save(new Role(AuthorityLevel.TEACHER));
-            roleRepository.save(new Role(AuthorityLevel.ADMIN));
-            roleRepository.save(new Role(AuthorityLevel.MASTER));
+            if (roleRepository.count() == 0) {
+                roleRepository.save(new Role(AuthorityLevel.LEARNER));
+                roleRepository.save(new Role(AuthorityLevel.TEACHER));
+                roleRepository.save(new Role(AuthorityLevel.ADMIN));
+                roleRepository.save(new Role(AuthorityLevel.MASTER));
+            }
             // potentially add some starter users
         };
     }
