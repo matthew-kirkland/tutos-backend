@@ -1,5 +1,6 @@
 package org.tutos.backend.calendar;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.tutos.backend.calendar.dto.ClassSessionDto;
 import org.tutos.backend.calendar.entity.ClassSessionStatus;
 import org.springframework.web.bind.annotation.*;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 
 @RestController
+@RequestMapping("/calendar")
 public class ClassCalendarController {
     private final ClassCalendarService classCalendarService;
 
@@ -32,16 +34,19 @@ public class ClassCalendarController {
         return classCalendarService.updateSessionStatus(classSessionId, status);
     }
 
+    @PreAuthorize("hasAnyRole('TEACHER', 'ADMIN', 'MASTER')")
     @PostMapping("/sessions/{classSessionId}/addNotes")
     public void addSessionNotes(@PathVariable Long classSessionId, @RequestBody String notes) {
         classCalendarService.addSessionNotes(classSessionId, notes);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MASTER')")
     @PutMapping("/sessions/{classSessionId}/replaceTutors")
     public void replaceSessionTutors(@PathVariable Long classSessionId, @RequestBody Set<Long> tutorIds) {
         classCalendarService.replaceSessionTutors(classSessionId, tutorIds);
     }
 
+    @PreAuthorize("hasAnyRole('TEACHER', 'MASTER')")
     @PostMapping("/sessions/{classSessionId}/attendance")
     public ClassSessionDto.AttendanceDetails submitSessionAttendance(
             @PathVariable Long classSessionId,
@@ -51,6 +56,7 @@ public class ClassCalendarController {
         return classCalendarService.submitSessionAttendance(classSessionId, request, tutorId);
     }
 
+    @PreAuthorize("hasAnyRole('TEACHER', 'ADMIN', 'MASTER')")
     @GetMapping("/sessions/{classSessionId}/attendance")
     public ClassSessionDto.AttendanceDetails getSessionAttendance(@PathVariable Long classSessionId) {
         return classCalendarService.getSessionAttendance(classSessionId);

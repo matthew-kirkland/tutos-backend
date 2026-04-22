@@ -1,6 +1,7 @@
 package org.tutos.backend.classroom;
 
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.tutos.backend.calendar.dto.ClassSessionDto;
 import org.tutos.backend.classroom.dto.AnnouncementDto;
 import org.tutos.backend.classroom.dto.AssignmentDto;
@@ -22,12 +23,14 @@ public class ClassroomController {
         this.classroomService = classroomService;
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MASTER')")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/groupclass/scheduled")
     public ClassDto.Details createScheduledGroupClass(@RequestBody @Valid ClassDto.ScheduledGroupClassCreation dto) {
         return classroomService.createScheduledGroupClass(dto);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MASTER')")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/privateclass/scheduled")
     public ClassDto.Details createScheduledPrivateClass(
@@ -36,12 +39,14 @@ public class ClassroomController {
         return classroomService.createScheduledPrivateClass(dto);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MASTER')")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/groupclass/shortTerm")
     public ClassDto.Details createShortTermGroupClass(@RequestBody @Valid ClassDto.ShortTermGroupClassCreation dto) {
         return classroomService.createShortTermGroupClass(dto);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MASTER')")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/privateclass/shortTerm")
     public ClassDto.Details createShortTermPrivateClass(
@@ -50,6 +55,7 @@ public class ClassroomController {
         return classroomService.createShortTermPrivateClass(dto);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MASTER')")
     @GetMapping()
     public List<ClassDto.Details> getAllClasses() {
         return classroomService.getAllClasses();
@@ -60,6 +66,7 @@ public class ClassroomController {
         return classroomService.getClassDetails(classId);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MASTER')")
     @PutMapping("/{classId}")
     public ClassDto.Details updateClassDetails(
             @PathVariable Long classId,
@@ -68,11 +75,13 @@ public class ClassroomController {
         return classroomService.updateClassDetails(classId, classCreationDto);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MASTER')")
     @DeleteMapping("/{classId}")
     public void deleteClass(@PathVariable Long classId) {
         classroomService.deleteClass(classId);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MASTER')")
     @PostMapping("/{classId}/tutors")
     public void addTutorToClass(@PathVariable Long classId, @RequestBody Long tutorId) {
         classroomService.addTutorToClass(classId, tutorId);
@@ -83,11 +92,13 @@ public class ClassroomController {
         return classroomService.getTutorsInClass(classId);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MASTER')")
     @DeleteMapping("/{classId}/tutors")
     public void removeTutorFromClass(@PathVariable Long classId, @RequestBody Long tutorId) {
         classroomService.removeTutorFromClass(classId, tutorId);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MASTER')")
     @PostMapping("/{classId}/students")
     public void addStudentToClass(@PathVariable Long classId, @RequestBody Long studentId) {
         classroomService.addStudentToClass(classId, studentId);
@@ -98,11 +109,13 @@ public class ClassroomController {
         return classroomService.getStudentsInClass(classId);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MASTER')")
     @DeleteMapping("/{classId}/students")
     public void removeStudentFromClass(@PathVariable Long classId, @RequestBody Long studentId) {
         classroomService.removeStudentFromClass(classId, studentId);
     }
 
+    @PreAuthorize("hasAnyRole('TEACHER', 'MASTER')")
     @PostMapping("/{classId}/assignments")
     public void createAssignment(
             @PathVariable Long classId,
@@ -121,6 +134,7 @@ public class ClassroomController {
         return classroomService.getAssignmentDetails(classId, assignmentId);
     }
 
+    @PreAuthorize("hasAnyRole('TEACHER', 'MASTER')")
     @PutMapping("/{classId}/assignments/{assignmentId}")
     public AssignmentDto.Details updateAssignmentDetails(
             @PathVariable Long classId,
@@ -130,11 +144,13 @@ public class ClassroomController {
         return classroomService.updateAssignmentDetails(classId, assignmentId, assignmentCreationDto);
     }
 
+    @PreAuthorize("hasAnyRole('TEACHER, 'MASTER')")
     @DeleteMapping("/{classId}/assignments/{assignmentId}")
     public void deleteAssignment(@PathVariable Long classId, @PathVariable Long assignmentId) {
         classroomService.deleteAssignment(classId, assignmentId);
     }
 
+    @PreAuthorize("hasAnyRole('TEACHER', 'MASTER')")
     @PostMapping("/{classId}/announcements")
     public AnnouncementDto.Details createAnnouncement(
             @PathVariable Long classId,
@@ -156,6 +172,7 @@ public class ClassroomController {
         return classroomService.getAnnouncementDetails(classId, announcementId);
     }
 
+    @PreAuthorize("hasAnyRole('TEACHER', 'MASTER')")
     @PutMapping("/{classId}/announcements/{announcementId}")
     public AnnouncementDto.Details updateAnnouncementDetails(
             @PathVariable Long classId,
@@ -165,6 +182,7 @@ public class ClassroomController {
         return classroomService.updateAnnouncementDetails(classId, announcementId, announcementCreationDto);
     }
 
+    @PreAuthorize("hasAnyRole('TEACHER', 'MASTER')")
     @DeleteMapping("/{classId}/announcements/{announcementId}")
     public void deleteAnnouncement(@PathVariable Long classId, @PathVariable Long announcementId) {
         classroomService.deleteAnnouncement(classId, announcementId);
