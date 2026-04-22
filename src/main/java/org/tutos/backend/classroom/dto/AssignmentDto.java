@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class AssignmentDto {
     public record Creation(
@@ -14,7 +15,7 @@ public class AssignmentDto {
     }
 
     public record Details(
-            Long assignmentId,
+            UUID assignmentId,
             ClassDto.Summary classBelongingTo,
             String title,
             String description,
@@ -24,7 +25,7 @@ public class AssignmentDto {
     }
 
     public record Summary(
-            Long assignmentId,
+            UUID assignmentId,
             String title,
             String description,
             LocalDateTime dueDate

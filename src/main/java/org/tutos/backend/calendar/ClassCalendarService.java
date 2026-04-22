@@ -21,10 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ClassCalendarService {
@@ -46,33 +43,33 @@ public class ClassCalendarService {
         this.calendarDtoMapper = calendarDtoMapper;
     }
 
-    public ClassSessionDto.Details getSessionDetails(Long classSessionId) {
+    public ClassSessionDto.Details getSessionDetails(UUID classSessionId) {
         ClassSession session = classSessionRepository.findById(classSessionId)
                 .orElseThrow(() -> new ClassSessionNotFoundException(classSessionId));
         return calendarDtoMapper.toDetailsDto(session);
     }
 
-    public ClassSessionStatus getSessionStatus(Long classSessionId) {
+    public ClassSessionStatus getSessionStatus(UUID classSessionId) {
         ClassSession session = classSessionRepository.findById(classSessionId)
                 .orElseThrow(() -> new ClassSessionNotFoundException(classSessionId));
         return session.getStatus();
     }
 
-    public ClassSessionDto.Details updateSessionStatus(Long classSessionId, ClassSessionStatus status) {
+    public ClassSessionDto.Details updateSessionStatus(UUID classSessionId, ClassSessionStatus status) {
         ClassSession session = classSessionRepository.findById(classSessionId)
                 .orElseThrow(() -> new ClassSessionNotFoundException(classSessionId));
         session.setStatus(status);
         return calendarDtoMapper.toDetailsDto(classSessionRepository.save(session));
     }
 
-    public void addSessionNotes(Long classSessionId, String notes) {
+    public void addSessionNotes(UUID classSessionId, String notes) {
         ClassSession session = classSessionRepository.findById(classSessionId)
                 .orElseThrow(() -> new ClassSessionNotFoundException(classSessionId));
         session.setNotes(notes);
     }
 
     @Transactional
-    public void replaceSessionTutors(Long classSessionId, Set<Long> tutorIds) {
+    public void replaceSessionTutors(UUID classSessionId, Set<UUID> tutorIds) {
         List<User> tutors = userRepository.findAllById(tutorIds);
         // TODO throw exception if any user not found
         ClassSession existingSession = classSessionRepository.findById(classSessionId)
@@ -92,9 +89,9 @@ public class ClassCalendarService {
 
     @Transactional
     public ClassSessionDto.AttendanceDetails submitSessionAttendance(
-            Long classSessionId,
+            UUID classSessionId,
             ClassSessionDto.AttendanceRequest request,
-            Long tutorId
+            UUID tutorId
     ) {
         ClassSession existingSession = classSessionRepository.findById(classSessionId)
                 .orElseThrow(() -> new ClassSessionNotFoundException(classSessionId));
@@ -130,7 +127,7 @@ public class ClassCalendarService {
         return calendarDtoMapper.toAttendanceDetailsDto(classSessionRepository.save(existingSession));
     }
 
-    public ClassSessionDto.AttendanceDetails getSessionAttendance(Long classSessionId) {
+    public ClassSessionDto.AttendanceDetails getSessionAttendance(UUID classSessionId) {
         ClassSession existingSession = classSessionRepository.findById(classSessionId)
                 .orElseThrow(() -> new ClassSessionNotFoundException(classSessionId));
         return calendarDtoMapper.toAttendanceDetailsDto(existingSession);

@@ -3,6 +3,7 @@ package org.tutos.backend.classroom.dto;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class AnnouncementDto {
     public record Creation(
@@ -12,7 +13,7 @@ public class AnnouncementDto {
     }
 
     public record Details(
-            Long announcementId,
+            UUID announcementId,
             ClassDto.Summary classBelongingTo,
             String title,
             String message,
@@ -21,7 +22,7 @@ public class AnnouncementDto {
     }
 
     public record Summary(
-            Long announcementId,
+            UUID announcementId,
             String title,
             String message
     ) {

@@ -8,6 +8,7 @@ import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.UUID;
 
 public class ClassScheduleDto {
     public record Creation(
@@ -21,8 +22,8 @@ public class ClassScheduleDto {
     }
 
     public record Details(
-            Long classScheduleId,
-            Long classOfId,
+            UUID classScheduleId,
+            UUID classOfId,
             DayOfWeek dayOfWeek,
             LocalTime startTime,
             Duration duration,
@@ -33,7 +34,7 @@ public class ClassScheduleDto {
     }
 
     public record Summary(
-            Long classScheduleId,
+            UUID classScheduleId,
             DayOfWeek dayOfWeek,
             LocalTime startTime,
             Duration duration,
@@ -42,7 +43,7 @@ public class ClassScheduleDto {
     }
 
     public record DetailsUpdate(
-            Long classScheduleId,
+            UUID classScheduleId,
             DayOfWeek dayOfWeek,
             LocalTime startTime,
             Duration duration,

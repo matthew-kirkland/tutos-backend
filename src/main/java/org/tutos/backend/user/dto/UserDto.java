@@ -5,10 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class UserDto {
     public record Details(
-            Long userId,
+            UUID userId,
             String username,
             String email,
             String phone,
@@ -19,7 +20,7 @@ public class UserDto {
     }
 
     public record Summary(
-            Long userId,
+            UUID userId,
             String email,
             String phone,
             String nameFirst,

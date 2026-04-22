@@ -9,14 +9,15 @@ import org.tutos.backend.user.entity.Tutor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "classes")
 public abstract class Class {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long classId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID classId;
     private String title;
     private String description;
     @ManyToMany
@@ -90,7 +91,7 @@ public abstract class Class {
 
     public abstract void removeStudent(Student user);
 
-    public Long getClassId() {
+    public UUID getClassId() {
         return classId;
     }
 

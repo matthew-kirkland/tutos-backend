@@ -5,11 +5,13 @@ import jakarta.persistence.*;
 import org.tutos.backend.user.entity.Student;
 import org.tutos.backend.user.entity.Tutor;
 
+import java.util.UUID;
+
 @Entity
 public class StudentAttendanceRecord {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long studentAttendanceRecordId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID studentAttendanceRecordId;
     @ManyToOne
     @JoinColumn(name = "session_id")
     private ClassSession classSession;
@@ -33,11 +35,11 @@ public class StudentAttendanceRecord {
     }
 
 
-    public Long getStudentAttendanceRecordId() {
+    public UUID getStudentAttendanceRecordId() {
         return studentAttendanceRecordId;
     }
 
-    public void setStudentAttendanceRecordId(Long studentAttendanceRecordId) {
+    public void setStudentAttendanceRecordId(UUID studentAttendanceRecordId) {
         this.studentAttendanceRecordId = studentAttendanceRecordId;
     }
 

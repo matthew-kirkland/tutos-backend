@@ -7,14 +7,16 @@ import jakarta.persistence.Id;
 import org.tutos.backend.auth.utils.AuthorityLevel;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.util.UUID;
+
 @Entity
 public class Role implements GrantedAuthority {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long roleId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID roleId;
     private AuthorityLevel authority;
 
-    public Role(Long roleId, AuthorityLevel authority) {
+    public Role(UUID roleId, AuthorityLevel authority) {
         this.setRoleId(roleId);
         this.setAuthority(authority);
     }
@@ -31,11 +33,11 @@ public class Role implements GrantedAuthority {
         return authority.toString();
     }
 
-    public Long getRoleId() {
+    public UUID getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(Long roleId) {
+    public void setRoleId(UUID roleId) {
         this.roleId = roleId;
     }
 
