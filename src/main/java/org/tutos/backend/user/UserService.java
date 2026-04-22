@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -46,13 +47,13 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll().stream().map(userDtoMapper::toDetailsDto).toList();
     }
 
-    public UserDto.Details getUserDetails(Long userId) {
+    public UserDto.Details getUserDetails(UUID userId) {
         return userDtoMapper.toDetailsDto(userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId)));
     }
 
     @Transactional
-    public UserDto.Details updateUserDetails(Long userId, UserDto.DetailsUpdate dto) {
+    public UserDto.Details updateUserDetails(UUID userId, UserDto.DetailsUpdate dto) {
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
 
@@ -75,7 +76,7 @@ public class UserService implements UserDetailsService {
         return userDtoMapper.toDetailsDto(existingUser);
     }
 
-    public List<ClassDto.Details> getUserLessons(Long userId) {
+    public List<ClassDto.Details> getUserLessons(UUID userId) {
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
 
@@ -86,7 +87,7 @@ public class UserService implements UserDetailsService {
         return ((Student) existingUser).getLessons().stream().map(classroomDtoMapper::toDetailsDto).toList();
     }
 
-    public List<ClassDto.Details> getUserClasses(Long userId) {
+    public List<ClassDto.Details> getUserClasses(UUID userId) {
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
 
@@ -97,7 +98,7 @@ public class UserService implements UserDetailsService {
         return ((Tutor) existingUser).getClasses().stream().map(classroomDtoMapper::toDetailsDto).toList();
     }
 
-    public List<AssignmentDto.Details> getUserAssignments(Long userId) {
+    public List<AssignmentDto.Details> getUserAssignments(UUID userId) {
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
 
@@ -109,7 +110,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public void deleteUser(Long userId) {
+    public void deleteUser(UUID userId) {
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
         userRepository.delete(existingUser);

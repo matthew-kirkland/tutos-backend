@@ -11,14 +11,15 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 public class ClassDto {
     public record ScheduledGroupClassCreation(
             @NotBlank String title,
             String description,
             @NotNull ClassScheduleDto.Creation scheduleCreationDto,
-            Set<Long> tutorIds,
-            Set<Long> studentIds
+            Set<UUID> tutorIds,
+            Set<UUID> studentIds
     ) {
     }
 
@@ -26,8 +27,8 @@ public class ClassDto {
             @NotBlank String title,
             String description,
             @NotNull ClassScheduleDto.Creation scheduleCreationDto,
-            Set<Long> tutorIds,
-            Long studentId
+            Set<UUID> tutorIds,
+            UUID studentId
     ) {
     }
 
@@ -35,8 +36,8 @@ public class ClassDto {
             @NotBlank String title,
             String description,
             @NotNull List<ClassSessionDto.Creation> sessionDates,
-            Set<Long> tutorIds,
-            Set<Long> studentIds
+            Set<UUID> tutorIds,
+            Set<UUID> studentIds
     ) {
     }
 
@@ -44,13 +45,13 @@ public class ClassDto {
             @NotBlank String title,
             String description,
             @NotNull List<ClassSessionDto.Creation> sessionDates,
-            Set<Long> tutorIds,
-            Long studentId
+            Set<UUID> tutorIds,
+            UUID studentId
     ) {
     }
 
     public record Details(
-            Long classId,
+            UUID classId,
             String title,
             String description,
             Set<UserDto.Summary> tutors,
@@ -62,7 +63,7 @@ public class ClassDto {
     }
 
     public record Summary(
-            Long classId,
+            UUID classId,
             String title,
             String description,
             ClassScheduleDto.Summary scheduleDetailsDto

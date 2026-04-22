@@ -3,12 +3,13 @@ package org.tutos.backend.classroom.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 public class Announcement {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long announcementId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID announcementId;
     @ManyToOne
     @JoinColumn(name = "class_id")
     private Class classBelongingTo;
@@ -38,7 +39,7 @@ public class Announcement {
         this.setMessage(message);
     }
 
-    public Long getAnnouncementId() {
+    public UUID getAnnouncementId() {
         return announcementId;
     }
 

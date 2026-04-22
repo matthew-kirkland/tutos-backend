@@ -3,12 +3,13 @@ package org.tutos.backend.classroom.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 public class Assignment {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long assignmentId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID assignmentId;
     @ManyToOne
     @JoinColumn(name = "class_id")
     private Class classBelongingTo;
@@ -39,7 +40,7 @@ public class Assignment {
         this.setDueDate(dueDate);
     }
 
-    public Long getAssignmentId() {
+    public UUID getAssignmentId() {
         return assignmentId;
     }
 

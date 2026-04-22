@@ -8,13 +8,14 @@ import org.tutos.backend.user.entity.Tutor;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "class_sessions")
 public class ClassSession {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long classSessionId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID classSessionId;
     @ManyToOne
     @JoinColumn(name = "class_id")
     private Class classOf;
@@ -83,11 +84,11 @@ public class ClassSession {
         this.activeTutors.addAll(tutors);
     }
 
-    public Long getClassSessionId() {
+    public UUID getClassSessionId() {
         return classSessionId;
     }
 
-    public void setClassSessionId(Long classSessionId) {
+    public void setClassSessionId(UUID classSessionId) {
         this.classSessionId = classSessionId;
     }
 

@@ -1,11 +1,13 @@
 package org.tutos.backend.user;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.tutos.backend.classroom.dto.AssignmentDto;
 import org.tutos.backend.classroom.dto.ClassDto;
 import org.tutos.backend.user.dto.UserDto;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
@@ -16,38 +18,41 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MASTER')")
     @GetMapping()
     public List<UserDto.Details> getAllUsers() {
         return userService.getAllUsers();
     }
 
     @GetMapping("/{userId}")
-    public UserDto.Details getUserDetails(@PathVariable Long userId) {
+    public UserDto.Details getUserDetails(@PathVariable UUID userId) {
         return userService.getUserDetails(userId);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MASTER')")
     @PutMapping("/{userId}")
-    public UserDto.Details updateUserDetails(@PathVariable Long userId, @RequestBody UserDto.DetailsUpdate newDetails) {
+    public UserDto.Details updateUserDetails(@PathVariable UUID userId, @RequestBody UserDto.DetailsUpdate newDetails) {
         return userService.updateUserDetails(userId, newDetails);
     }
 
     @GetMapping("/{userId}/lessons")
-    public List<ClassDto.Details> getUserLessons(@PathVariable Long userId) {
+    public List<ClassDto.Details> getUserLessons(@PathVariable UUID userId) {
         return userService.getUserLessons(userId);
     }
 
     @GetMapping("/{userId}/classes")
-    public List<ClassDto.Details> getUserClasses(@PathVariable Long userId) {
+    public List<ClassDto.Details> getUserClasses(@PathVariable UUID userId) {
         return userService.getUserClasses(userId);
     }
 
     @GetMapping("/{userId}/assignments")
-    public List<AssignmentDto.Details> getUserAssignments(@PathVariable Long userId) {
+    public List<AssignmentDto.Details> getUserAssignments(@PathVariable UUID userId) {
         return userService.getUserAssignments(userId);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'MASTER')")
     @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable Long userId) {
+    public void deleteUser(@PathVariable UUID userId) {
         userService.deleteUser(userId);
     }
 }

@@ -7,13 +7,14 @@ import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "class_schedules")
 public class ClassSchedule {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long classScheduleId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID classScheduleId;
     @OneToOne
     @JoinColumn(name = "class_id")
     private Class classOf;
@@ -45,7 +46,7 @@ public class ClassSchedule {
     public ClassSchedule() {
     }
 
-    public Long getClassScheduleId() {
+    public UUID getClassScheduleId() {
         return classScheduleId;
     }
 

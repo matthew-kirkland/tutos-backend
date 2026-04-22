@@ -5,6 +5,7 @@ import org.tutos.backend.calendar.entity.ClassSessionStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 public class ClassSessionDto {
     public record Creation(
@@ -14,9 +15,9 @@ public class ClassSessionDto {
     }
 
     public record Details(
-            Long classSessionId,
-            Long classOfId,
-            Long classScheduleId,
+            UUID classSessionId,
+            UUID classOfId,
+            UUID classScheduleId,
             LocalDateTime startTime,
             LocalDateTime endTime,
             ClassSessionStatus status,
@@ -25,7 +26,7 @@ public class ClassSessionDto {
     }
 
     public record Summary(
-            Long classSessionId,
+            UUID classSessionId,
             LocalDateTime startTime,
             LocalDateTime endTime,
             ClassSessionStatus status
@@ -38,7 +39,7 @@ public class ClassSessionDto {
     }
 
     public record AttendanceDetails(
-            Long classSessionId,
+            UUID classSessionId,
             List<StudentAttendanceDto.Details> attendance
     ) {
     }

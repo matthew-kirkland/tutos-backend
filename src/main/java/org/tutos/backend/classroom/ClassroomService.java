@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,8 +66,8 @@ public class ClassroomService {
 
     @Transactional
     public ClassDto.Details createScheduledGroupClass(ClassDto.ScheduledGroupClassCreation dto) {
-        Set<Long> tutorIds = (dto.tutorIds() == null) ? Set.of() : dto.tutorIds();
-        Set<Long> studentIds = (dto.studentIds() == null) ? Set.of() : dto.studentIds();
+        Set<UUID> tutorIds = (dto.tutorIds() == null) ? Set.of() : dto.tutorIds();
+        Set<UUID> studentIds = (dto.studentIds() == null) ? Set.of() : dto.studentIds();
         GroupClass groupClass = instantiateGroupClass(dto.title(), dto.description(), tutorIds, studentIds);
 
         classCalendarService.createClassSchedule(groupClass, dto.scheduleCreationDto());
@@ -75,8 +76,8 @@ public class ClassroomService {
 
     @Transactional
     public ClassDto.Details createShortTermGroupClass(ClassDto.ShortTermGroupClassCreation dto) {
-        Set<Long> tutorIds = (dto.tutorIds() == null) ? Set.of() : dto.tutorIds();
-        Set<Long> studentIds = (dto.studentIds() == null) ? Set.of() : dto.studentIds();
+        Set<UUID> tutorIds = (dto.tutorIds() == null) ? Set.of() : dto.tutorIds();
+        Set<UUID> studentIds = (dto.studentIds() == null) ? Set.of() : dto.studentIds();
         GroupClass groupClass = instantiateGroupClass(dto.title(), dto.description(), tutorIds, studentIds);
 
         classCalendarService.generateShortTermSessions(groupClass, dto.sessionDates());
@@ -85,7 +86,7 @@ public class ClassroomService {
 
     @Transactional
     public ClassDto.Details createScheduledPrivateClass(ClassDto.ScheduledPrivateClassCreation dto) {
-        Set<Long> tutorIds = (dto.tutorIds() == null) ? Set.of() : dto.tutorIds();
+        Set<UUID> tutorIds = (dto.tutorIds() == null) ? Set.of() : dto.tutorIds();
         PrivateClass privateClass = instantiatePrivateClass(dto.title(), dto.description(), tutorIds, dto.studentId());
 
         classCalendarService.createClassSchedule(privateClass, dto.scheduleCreationDto());
@@ -94,7 +95,7 @@ public class ClassroomService {
 
     @Transactional
     public ClassDto.Details createShortTermPrivateClass(ClassDto.ShortTermPrivateClassCreation dto) {
-        Set<Long> tutorIds = (dto.tutorIds() == null) ? Set.of() : dto.tutorIds();
+        Set<UUID> tutorIds = (dto.tutorIds() == null) ? Set.of() : dto.tutorIds();
         PrivateClass privateClass = instantiatePrivateClass(dto.title(), dto.description(), tutorIds, dto.studentId());
 
         classCalendarService.generateShortTermSessions(privateClass, dto.sessionDates());
@@ -107,13 +108,13 @@ public class ClassroomService {
                 .collect(Collectors.toList());
     }
 
-    public ClassDto.Details getClassDetails(Long classId) {
+    public ClassDto.Details getClassDetails(UUID classId) {
         return classroomDtoMapper.toDetailsDto(classroomRepository.findById(classId)
                 .orElseThrow(() -> new ClassNotFoundException(classId)));
     }
 
     @Transactional
-    public ClassDto.Details updateClassDetails(Long classId, ClassDto.DetailsUpdate newClassDetails) {
+    public ClassDto.Details updateClassDetails(UUID classId, ClassDto.DetailsUpdate newClassDetails) {
         Class existingClass = classroomRepository.findById(classId)
                 .orElseThrow(() -> new ClassNotFoundException(classId));
 
@@ -125,14 +126,14 @@ public class ClassroomService {
     }
 
     @Transactional
-    public void deleteClass(Long classId) {
+    public void deleteClass(UUID classId) {
         Class existingClass = classroomRepository.findById(classId)
                 .orElseThrow(() -> new ClassNotFoundException(classId));
         classroomRepository.delete(existingClass);
     }
 
     @Transactional
-    public void addTutorToClass(Long classId, Long tutorId) {
+    public void addTutorToClass(UUID classId, UUID tutorId) {
         Class existingClass = classroomRepository.findById(classId)
                 .orElseThrow(() -> new ClassNotFoundException(classId));
         User existingTutor = userRepository.findById(tutorId)
@@ -150,14 +151,14 @@ public class ClassroomService {
         classroomRepository.save(existingClass);
     }
 
-    public List<UserDto.Details> getTutorsInClass(Long classId) {
+    public List<UserDto.Details> getTutorsInClass(UUID classId) {
         Class existingClass = classroomRepository.findById(classId)
                 .orElseThrow(() -> new ClassNotFoundException(classId));
         return existingClass.getTutors().stream().map(userDtoMapper::toDetailsDto).collect(Collectors.toList());
     }
 
     @Transactional
-    public void removeTutorFromClass(Long classId, Long tutorId) {
+    public void removeTutorFromClass(UUID classId, UUID tutorId) {
         Class existingClass = classroomRepository.findById(classId)
                 .orElseThrow(() -> new ClassNotFoundException(classId));
 
@@ -176,7 +177,7 @@ public class ClassroomService {
     }
 
     @Transactional
-    public void addStudentToClass(Long classId, Long studentId) {
+    public void addStudentToClass(UUID classId, UUID studentId) {
         Class existingClass = classroomRepository.findById(classId)
                 .orElseThrow(() -> new ClassNotFoundException(classId));
         User existingStudent = userRepository.findById(studentId)
@@ -194,14 +195,14 @@ public class ClassroomService {
         classroomRepository.save(existingClass);
     }
 
-    public List<UserDto.Details> getStudentsInClass(Long classId) {
+    public List<UserDto.Details> getStudentsInClass(UUID classId) {
         Class existingClass = classroomRepository.findById(classId)
                 .orElseThrow(() -> new ClassNotFoundException(classId));
         return existingClass.getStudents().stream().map(userDtoMapper::toDetailsDto).collect(Collectors.toList());
     }
 
     @Transactional
-    public void removeStudentFromClass(Long classId, Long studentId) {
+    public void removeStudentFromClass(UUID classId, UUID studentId) {
         Class existingClass = classroomRepository.findById(classId)
                 .orElseThrow(() -> new ClassNotFoundException(classId));
         User existingStudent = userRepository.findById(studentId)
@@ -219,7 +220,7 @@ public class ClassroomService {
     }
 
     @Transactional
-    public AssignmentDto.Details createAssignment(Long classId, AssignmentDto.Creation dto) {
+    public AssignmentDto.Details createAssignment(UUID classId, AssignmentDto.Creation dto) {
         Class existingClass = classroomRepository.findById(classId)
                 .orElseThrow(() -> new ClassNotFoundException(classId));
 
@@ -234,7 +235,7 @@ public class ClassroomService {
         return classroomDtoMapper.toDetailsDto(assignmentRepository.save(assignment));
     }
 
-    public List<AssignmentDto.Details> getAllClassAssignments(Long classId) {
+    public List<AssignmentDto.Details> getAllClassAssignments(UUID classId) {
         Class existingClass = classroomRepository.findById(classId)
                 .orElseThrow(() -> new ClassNotFoundException(classId));
 
@@ -245,8 +246,8 @@ public class ClassroomService {
 
     @Transactional
     public AssignmentDto.Details updateAssignmentDetails(
-            Long classId,
-            Long assignmentId,
+            UUID classId,
+            UUID assignmentId,
             AssignmentDto.DetailsUpdate dto
     ) {
         Assignment existingAssignment = assignmentRepository.findById(assignmentId)
@@ -268,7 +269,7 @@ public class ClassroomService {
         return classroomDtoMapper.toDetailsDto(existingAssignment);
     }
 
-    public AssignmentDto.Details getAssignmentDetails(Long classId, Long assignmentId) {
+    public AssignmentDto.Details getAssignmentDetails(UUID classId, UUID assignmentId) {
         Assignment existingAssignment = assignmentRepository.findById(assignmentId)
                 .orElseThrow(() -> new AssignmentNotFoundException(assignmentId));
 
@@ -282,7 +283,7 @@ public class ClassroomService {
     }
 
     @Transactional
-    public void deleteAssignment(Long classId, Long assignmentId) {
+    public void deleteAssignment(UUID classId, UUID assignmentId) {
         Assignment existingAssignment = assignmentRepository.findById(assignmentId)
                 .orElseThrow(() -> new AssignmentNotFoundException(assignmentId));
         Class existingClass = classroomRepository.findById(classId)
@@ -298,7 +299,7 @@ public class ClassroomService {
     }
 
     @Transactional
-    public AnnouncementDto.Details createAnnouncement(Long classId, AnnouncementDto.Creation dto) {
+    public AnnouncementDto.Details createAnnouncement(UUID classId, AnnouncementDto.Creation dto) {
         Class existingClass = classroomRepository.findById(classId)
                 .orElseThrow(() -> new ClassNotFoundException(classId));
 
@@ -312,7 +313,7 @@ public class ClassroomService {
         return classroomDtoMapper.toDetailsDto(announcementRepository.save(announcement));
     }
 
-    public List<AnnouncementDto.Details> getAllClassAnnouncements(Long classId) {
+    public List<AnnouncementDto.Details> getAllClassAnnouncements(UUID classId) {
         Class existingClass = classroomRepository.findById(classId)
                 .orElseThrow(() -> new ClassNotFoundException(classId));
 
@@ -323,8 +324,8 @@ public class ClassroomService {
 
     @Transactional
     public AnnouncementDto.Details updateAnnouncementDetails(
-            Long classId,
-            Long announcementId,
+            UUID classId,
+            UUID announcementId,
             AnnouncementDto.DetailsUpdate dto
     ) {
         Announcement existingAnnouncement = announcementRepository.findById(announcementId)
@@ -345,7 +346,7 @@ public class ClassroomService {
         return classroomDtoMapper.toDetailsDto(existingAnnouncement);
     }
 
-    public AnnouncementDto.Details getAnnouncementDetails(Long classId, Long announcementId) {
+    public AnnouncementDto.Details getAnnouncementDetails(UUID classId, UUID announcementId) {
         Announcement existingAnnouncement = announcementRepository.findById(announcementId)
                 .orElseThrow(() -> new AnnouncementNotFoundException(announcementId));
 
@@ -359,7 +360,7 @@ public class ClassroomService {
     }
 
     @Transactional
-    public void deleteAnnouncement(Long classId, Long announcementId) {
+    public void deleteAnnouncement(UUID classId, UUID announcementId) {
         Announcement existingAnnouncement = announcementRepository.findById(announcementId)
                 .orElseThrow(() -> new AnnouncementNotFoundException(announcementId));
         Class existingClass = classroomRepository.findById(classId)
@@ -375,7 +376,7 @@ public class ClassroomService {
     }
 
     public List<ClassSessionDto.Details> getClassSessions(
-            Long classId,
+            UUID classId,
             LocalDateTime startDate,
             LocalDateTime endDate
     ) {
@@ -401,8 +402,8 @@ public class ClassroomService {
     private GroupClass instantiateGroupClass(
             String title,
             String description,
-            Set<Long> tutorIds,
-            Set<Long> studentIds
+            Set<UUID> tutorIds,
+            Set<UUID> studentIds
     ) {
         List<User> tutors = userRepository.findAllById(tutorIds);
         validateUserIds(tutors, tutorIds);
@@ -432,8 +433,8 @@ public class ClassroomService {
     private PrivateClass instantiatePrivateClass(
             String title,
             String description,
-            Set<Long> tutorIds,
-            Long studentId
+            Set<UUID> tutorIds,
+            UUID studentId
     ) {
         List<User> tutors = userRepository.findAllById(tutorIds);
         validateUserIds(tutors, tutorIds);
@@ -456,23 +457,23 @@ public class ClassroomService {
         return new PrivateClass(title, description, tutorsTyped, s);
     }
 
-    private void validateUserIds(List<User> foundUsers, Set<Long> originalIds) {
+    private void validateUserIds(List<User> foundUsers, Set<UUID> originalIds) {
         if (originalIds.isEmpty()) return;
 
-        Set<Long> foundIds = foundUsers.stream().map(User::getUserId).collect(Collectors.toSet());
-        Set<Long> missingIds = foundIds.stream().filter(i -> !originalIds.contains(i)).collect(Collectors.toSet());
+        Set<UUID> foundIds = foundUsers.stream().map(User::getUserId).collect(Collectors.toSet());
+        Set<UUID> missingIds = foundIds.stream().filter(i -> !originalIds.contains(i)).collect(Collectors.toSet());
         if (!missingIds.isEmpty()) {
             throw new UserNotFoundException("Users not found: " + missingIds);
         }
     }
 
-    private boolean assignmentNotInClass(Long classId, Assignment assignment) {
+    private boolean assignmentNotInClass(UUID classId, Assignment assignment) {
         Class existingClass = classroomRepository.findById(classId)
                 .orElseThrow(() -> new ClassNotFoundException(classId));
         return !existingClass.getAssignments().contains(assignment);
     }
 
-    private boolean announcementNotInClass(Long classId, Announcement announcement) {
+    private boolean announcementNotInClass(UUID classId, Announcement announcement) {
         Class existingClass = classroomRepository.findById(classId)
                 .orElseThrow(() -> new ClassNotFoundException(classId));
         return !existingClass.getAnnouncements().contains(announcement);
