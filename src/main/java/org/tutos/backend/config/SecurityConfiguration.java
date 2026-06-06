@@ -6,6 +6,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.tutos.backend.auth.utils.RsaKeyProperties;
@@ -55,6 +56,7 @@ public class SecurityConfiguration {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
                     auth.requestMatchers("/auth/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
